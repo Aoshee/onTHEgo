@@ -16,9 +16,13 @@ Options:
 1: Host Info (Domain Info)
 2: Wifi Sniffer
 3: MITM
-4: Dirty Cow exploit
-5: MS08-067 (XP/2000/2003)
+4: exit
 """
+
+print "============================================"
+print " onTHEgo mobile pentest framework           "
+print "============================================"
+print "1. Host info\n2. Wifi Sniffer (2 #interface name)\n3. MITM Attack\n4. Exit"
 class ONTHEGO(cmd.Cmd):
     prompt = 'oTg> '
     def do_1(self, line):
@@ -83,6 +87,8 @@ class ONTHEGO(cmd.Cmd):
                     reARP()
                     break
         mitm()
+    def do_4(self):
+        exit(1)
 
 # shell loop
 if __name__ == '__main__':
