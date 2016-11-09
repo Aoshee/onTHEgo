@@ -22,7 +22,7 @@ Options:
 print "============================================"
 print " onTHEgo mobile pentest framework           "
 print "============================================"
-print "1. Host info\n2. Wifi Sniffer (2 #interface name)\n3. MITM Attack\n4. Exit"
+print "1. Host info (1 #url)\n2. Wifi Sniffer (2 #interface name)\n3. MITM Attack\n4. Exit"
 class ONTHEGO(cmd.Cmd):
     prompt = 'oTg> '
     def do_1(self, line):
