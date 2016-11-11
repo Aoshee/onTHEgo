@@ -37,4 +37,4 @@ sudo airmon-ng stop #interface name ending in mon (wlp3s0mon)
 * TCP SYN/ACk flood (or DoS) allows you to flood a target with TCP SYN/ACK packages (SYN = sync, ACK = acknowlege). The tool will notify when the target stops acknowledging the SYN (also known as the Three-Way handshake = TCP SYN/ACK).
 * The undecided one might be a slot for drone hacking or something else visit [this](r3c0nx00.github.io/contact.html) and contact me on any of those to give me some ideas to roll into the mobile framework.
 
-That's it for the documentation, I hope you enjoy the tool and keep on hacking!onthe
+That's it for the documentation, I hope you enjoy the tool and keep on hacking!   
