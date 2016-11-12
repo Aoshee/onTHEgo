@@ -4,7 +4,7 @@ onTHEgo is a mobile penetration testing tool that can be run on rooted Android p
 ## Requirements
 You will need scapy. 
 ```bash
-sudo pip install scapy
+sudo pip install -r REQUIREMENTS
 ```
 ## Usage
 It's simple, when you start up the tool, you get a thing that looks like this:
