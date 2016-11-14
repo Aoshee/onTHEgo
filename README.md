@@ -6,6 +6,10 @@ You will need scapy.
 ```bash
 sudo pip install -r REQUIREMENTS
 ```
+If you want to use shodan, you'll need to run the install script:
+```bash
+sudo chmod +x install.sh && sudo ./install.sh
+```
 ## Usage
 It's simple, when you start up the tool, you get a thing that looks like this:
 
