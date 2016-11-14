@@ -1,17 +1,23 @@
 #!/usr/bin/env python
 import os, commands, cmd, sys, socket, time, threading
-
+global key_file
+key_file = 'key.txt'
 try:
     from scapy.all import *
 except ImportError:
     print "You are missing scapy"
-
+    exit(1)
+try:
+    import shodan
+except ImportError:
+    print "You are missing shodan"
+    exit(1)
 """
 Mobile pentest platform for android (can be used on Linux/Mac too)
 Author: _r3c0n_
-Name: onthego
+Name: onTHEgo
 Version: v.01
-""" 
+"""
 """
 Options:
 1: Host Info (Domain Info)
@@ -20,21 +26,24 @@ Options:
 4: exit
 """
 accepted_drones = ['parrot', 'parrot 2.0', 'parrot 2']
-
-print "============================================"
-print "    onTHEgo mobile pentest framework        "
-print "============================================"
-print "1. Host info (1 #url)\n2. Wifi Sniffer (2 #interface name)\n3. MITM Attack\n4. TCP SYN/ACK flood\n5. Undecided\n6. Exit"
+banner = """============================================
+    onTHEgo mobile pentest framework
+============================================
+1. Host info (1 #url)\n2. Wifi Sniffer (2 #interface name)\n3. MITM Attack\n4. TCP SYN/ACK flood\n5. Shodan\n6. Exit
+"""
+print banner
 class ONTHEGO(cmd.Cmd):
     prompt = 'oTg> '
     def do_1(self, line):
         info = socket.gethostbyname(line)
         print info
+        print "\n" + banner
     def do_2(self, line):
         def PacketHandler(pkt):
             if pkt.type == 0 and pkt.subtype == 8:
                 print " AP MAC: %s with SSID: %s " % (pkt.addr2, pkt.info)
         sniff(iface=line, prn = PacketHandler)
+        print banner
     def do_3(self, line):
         # MITM code written by: THE DEFALT
         # wonderhowto link: http://null-byte.wonderhowto.com/how-to/build-man-middle-tool-with-scapy-and-python-0163525/
@@ -89,6 +98,7 @@ class ONTHEGO(cmd.Cmd):
                     reARP()
                     break
         mitm()
+        print banner
     def do_4(self, line):
         # tcp flood
         interface = None
@@ -110,10 +120,51 @@ class ONTHEGO(cmd.Cmd):
                 sendSYN().start()
                 total += 1
                 sys.stdout.write("\rTotal packets sent:\t\t\t%i" % total)
-                
     def do_5(self, line):
-        pass 
+        if line == "1":
+            pass
+        else:
+            with open(key_file, 'r') as SHODAN_KEY:
+                SHODAN_API_KEY = SHODAN_KEY.read().strip("\n")
+                if SHODAN_API_KEY == "":
+                    print "[!] No API key loaded. Run install.sh to insert one"
+                else:
+                    api = shodan.Shodan(SHODAN_API_KEY)
+                print("1. Specific host\n2. Vulnerability\n3. Exit")
+                shodan_type = raw_input("[>] Choice: ")
+                if shodan_type == '1':
+                    specific_ip = raw_input("[>] IP: ")
+                    if specific_ip == "":
+                        print "[!] No IP specified"
+                    else:
+                        host = api.host(specific_ip)
+                        print "\n"
+                        print "######## INFO FOR %s #########" % specific_ip
+                        print "IP: %s\nOrganization: %s\nOperating System: %s" % (host['ip_str'], host.get('org', 'n/a'), host.get('os', 'n/a'))
+                        for item in host['data']:
+                            print "Port: %s\nBanner: %s" % (item['port'], item['data'])
+                        print "##########################################"
+                elif shodan_type == '2':
+                    search_term = raw_input("[>] Search term: ")
+                    if search_term == '':
+                        print("[!] No search term specified")
+                    else:
+                        try:
+                            results = api.search(search_term)
+                            print "Results found: %s" % results['total']
+                            for result in results['matches']:
+                                print "IP: %s" % result['ip_str']
+                                print result['data']
+                                print ''
+                        except shodan.APIError, e:
+                            print "[!] Shodan error: %s" % e
+                else:
+                    pass
     def do_6(self, line):
+        exit(1)
+    def do_exit(self, line):
+        exit(1)
+    def do_EOF(self, line):
         exit(1)
 
 # shell loop
