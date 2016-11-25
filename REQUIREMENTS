@@ -1,2 +1,4 @@
-scapy
-shodan
+scapy==2.3.3
+python-geoip
+python-geoip-geolite2
+paramiko==2.0.0
